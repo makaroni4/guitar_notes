@@ -1,4 +1,7 @@
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 var path = require("path");
+var fs = require('fs');
 
 var DIST_DIR = path.resolve(__dirname, "dist");
 var SRC_DIR = path.resolve(__dirname, "src");
@@ -19,9 +22,20 @@ var config = {
         query: {
           presets: ["react", "es2015", "stage-2"]
         }
+      },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader', use: 'css-loader!sass-loader' })
       }
     ]
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin({
+      filename: 'app.css',
+      allChunks: true
+    })
+  ]
 };
 
 module.exports = config;

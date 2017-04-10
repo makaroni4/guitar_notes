@@ -1,5 +1,7 @@
 import React from "react";
 
+import { GuitarNeck } from "./GuitarNeck";
+
 // const musicNotes = ["A", "B", "C", "D", "E", "F", "G"];
 const musicNotes = ["A", "B"];
 const guitarStrings = [1, 2, 3, 4, 5, 6];
@@ -126,6 +128,8 @@ export class Quiz extends React.Component {
           </label>
           <input type="submit" value="Submit" className="btn btn-primary" />
         </form>
+
+        <GuitarNeck/>
       </div>
     );
   }
