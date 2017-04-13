@@ -1,2 +1,11 @@
 @import "blocks/guitar_neck";
+@import "blocks/guitar_fret_strings";
 @import "blocks/quiz";
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}

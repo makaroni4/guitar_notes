@@ -17,7 +17,7 @@
 
     background: inherit;
 
-    transform: skewY(-1deg);
+    transform: skewY(-1.5deg);
     transform-origin: 100%;
     content: '';
   }
@@ -33,13 +33,14 @@
 
     background: inherit;
 
-    transform: skewY(1deg);
+    transform: skewY(1.5deg);
     transform-origin: 100%;
     content: '';
   }
 
   &__fret {
     height: 100%;
+    position: relative;
 
     border-right: 2px solid grey;
 
@@ -100,7 +101,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        margin: 0 -12px 0 -12px;
+        margin: -12px 0 0 -12px;
 
         border-radius: 50%;
 
@@ -119,7 +120,7 @@
         position: absolute;
         top: 25%;
         left: 50%;
-        margin: 0 -12px 0 -12px;
+        margin: -12px 0 0 -12px;
 
         border-radius: 50%;
 
@@ -134,7 +135,7 @@
         position: absolute;
         bottom: 25%;
         left: 50%;
-        margin: 0 -12px 0 -12px;
+        margin: -12px 0 0 -12px;
 
         border-radius: 50%;
 
