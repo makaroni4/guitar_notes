@@ -1,28 +1,15 @@
 .guitar-neck {
   position: relative;
   display: flex;
+  flex-direction: row-reverse;
   width: 800px;
   height: 200px;
 
   background-color: #a56d34;
 
+  transform: scaleX(-1);
+
   &:before {
-    top: 0;
-    display: block;
-    height: 50%;
-    left: 0;
-    position: absolute;
-    right: 0;
-    z-index: -1;
-
-    background: inherit;
-
-    transform: skewY(-1.5deg);
-    transform-origin: 100%;
-    content: '';
-  }
-
-  &:after {
     bottom: 0;
     display: block;
     height: 50%;
@@ -33,7 +20,23 @@
 
     background: inherit;
 
-    transform: skewY(1.5deg);
+    transform: skewY(-0.25deg);
+    transform-origin: 100%;
+    content: '';
+  }
+
+  &:after {
+    top: 0;
+    display: block;
+    height: 50%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: -1;
+
+    background: inherit;
+
+    transform: skewY(0.25deg);
     transform-origin: 100%;
     content: '';
   }
