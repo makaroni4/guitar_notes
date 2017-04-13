@@ -2,10 +2,8 @@ import React from "react";
 
 import { GuitarNeck } from "./GuitarNeck";
 
-// const musicNotes = ["A", "B", "C", "D", "E", "F", "G"];
-const musicNotes = ["A", "B"];
+const musicNotes = ["A", "B", "C", "D", "E", "F", "G"];
 const guitarStrings = [1, 2, 3, 4, 5, 6];
-const quizLength = 3;
 const notesFrets = {
   A: {
     1: [5],
@@ -16,6 +14,46 @@ const notesFrets = {
     6: [5]
   },
   B: {
+    1: [7],
+    2: [0, 12],
+    3: [4],
+    4: [9],
+    5: [2],
+    6: [7]
+  },
+  C: {
+    1: [7],
+    2: [0, 12],
+    3: [4],
+    4: [9],
+    5: [2],
+    6: [7]
+  },
+  D: {
+    1: [7],
+    2: [0, 12],
+    3: [4],
+    4: [9],
+    5: [2],
+    6: [7]
+  },
+  E: {
+    1: [7],
+    2: [0, 12],
+    3: [4],
+    4: [9],
+    5: [2],
+    6: [7]
+  },
+  F: {
+    1: [7],
+    2: [0, 12],
+    3: [4],
+    4: [9],
+    5: [2],
+    6: [7]
+  },
+  G: {
     1: [7],
     2: [0, 12],
     3: [4],
@@ -55,20 +93,14 @@ export class Quiz extends React.Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleAnswer(string, fret) {
+    this.setState({
+      currentAnswer: fret
+    });
 
-    var answer = this.state.currentAnswer;
-
-    var answerCorrect = notesFrets[this.state.currentNote][this.state.currentString].indexOf(answer) > -1;
+    var answerCorrect = notesFrets[this.state.currentNote][this.state.currentString].indexOf(fret) > -1;
 
     this.generateNextQuestion(answerCorrect);
-  }
-
-  handleChange(event) {
-    this.setState({
-      currentAnswer: parseInt(event.target.value)
-    });
   }
 
   render() {
@@ -121,16 +153,8 @@ export class Quiz extends React.Component {
           {this.state.currentNote} on {this.state.currentString} string
         </div>
 
-        <form onSubmit={this.handleSubmit.bind(this)}>
-          <label>
-            Enter number of fret:
-            <input type="text" value={this.state.currentAnswer} onChange={this.handleChange.bind(this)}/>
-          </label>
-          <input type="submit" value="Submit" className="btn btn-primary" />
-        </form>
-
         <div className="quiz__guitar-neck">
-          <GuitarNeck/>
+          <GuitarNeck handleAnswer={this.handleAnswer.bind(this)}/>
         </div>
       </div>
     );
