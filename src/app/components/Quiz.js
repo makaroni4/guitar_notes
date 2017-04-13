@@ -129,7 +129,9 @@ export class Quiz extends React.Component {
           <input type="submit" value="Submit" className="btn btn-primary" />
         </form>
 
-        <GuitarNeck/>
+        <div className="quiz__guitar-neck">
+          <GuitarNeck/>
+        </div>
       </div>
     );
   }
