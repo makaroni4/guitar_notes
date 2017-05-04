@@ -4,6 +4,7 @@ import { GuitarNeck } from "./GuitarNeck";
 
 const musicNotes = ["A", "B", "C", "D", "E", "F", "G"];
 const guitarStrings = [1, 2, 3, 4, 5, 6];
+// TODO: fill correct frets
 const notesFrets = {
   A: {
     1: [5],
@@ -100,6 +101,26 @@ export class Quiz extends React.Component {
 
     var answerCorrect = notesFrets[this.state.currentNote][this.state.currentString].indexOf(fret) > -1;
 
+    if(!answerCorrect) {
+      var correctAnswers = notesFrets[this.state.currentNote][this.state.currentString];
+      var $frets = document.getElementsByClassName("guitar-neck__fret");
+
+      var self = this;
+      correctAnswers.forEach(function(fret) {
+        var $fret = $frets[fret - 1];
+
+        var $fretSelectorCircle = $fret.getElementsByClassName("fret-selector-circle")[self.state.currentString - 1];
+
+        console.log($fretSelectorCircle)
+
+        $fretSelectorCircle.className += " fret-selector-circle--answer-highlight";
+
+        setTimeout(function() {
+          $fretSelectorCircle.className = $fretSelectorCircle.className.replace("fret-selector-circle--answer-highlight", "");
+        }, 2000);
+      });
+    }
+
     this.generateNextQuestion(answerCorrect);
   }
 
@@ -149,9 +170,9 @@ export class Quiz extends React.Component {
 
         {prevResult()}
 
-        <div className="quiz__question">
+        <h2 className="quiz__question">
           {this.state.currentNote} on {this.state.currentString} string
-        </div>
+        </h2>
 
         <div className="quiz__guitar-neck">
           <GuitarNeck handleAnswer={this.handleAnswer.bind(this)}/>

@@ -1,0 +1,19 @@
+.fret-selector-circle {
+  display: none;
+  width: 30px;
+  height: 30px;
+  z-index: 1501;
+  padding-left: 4px;
+
+  border-radius: 15px;
+
+  background-color: red;
+
+  cursor: pointer;
+
+  &--answer-highlight {
+    display: block;
+
+    background-color: green;
+  }
+}

@@ -1,6 +1,10 @@
 .quiz {
   padding-bottom: 40px;
 
+  &__question {
+    font-weight: bold;
+  }
+
   &__guitar-neck {
     margin-top: 40px;
   }

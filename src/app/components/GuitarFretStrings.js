@@ -10,31 +10,43 @@ export class GuitarFretStrings extends React.Component {
       <div className="guitar-fret-strings">
         <div className="guitar-fret-strings__string guitar-fret-strings__string--high-e-string">
           <div className="guitar-fret-strings__string-selector" onClick={this.selectFret.bind(this, 1)}>
+            <div className="fret-selector-circle">
+            </div>
           </div>
         </div>
 
         <div className="guitar-fret-strings__string guitar-fret-strings__string--b-string">
           <div className="guitar-fret-strings__string-selector" onClick={this.selectFret.bind(this, 2)}>
+            <div className="fret-selector-circle">
+            </div>
           </div>
         </div>
 
         <div className="guitar-fret-strings__string guitar-fret-strings__string--g-string">
           <div className="guitar-fret-strings__string-selector" onClick={this.selectFret.bind(this, 3)}>
+            <div className="fret-selector-circle">
+            </div>
           </div>
         </div>
 
         <div className="guitar-fret-strings__string guitar-fret-strings__string--d-string">
           <div className="guitar-fret-strings__string-selector" onClick={this.selectFret.bind(this, 4)}>
+            <div className="fret-selector-circle">
+            </div>
           </div>
         </div>
 
         <div className="guitar-fret-strings__string guitar-fret-strings__string--a-string">
           <div className="guitar-fret-strings__string-selector" onClick={this.selectFret.bind(this, 5)}>
+            <div className="fret-selector-circle">
+            </div>
           </div>
         </div>
 
         <div className="guitar-fret-strings__string guitar-fret-strings__string--low-e-string">
           <div className="guitar-fret-strings__string-selector" onClick={this.selectFret.bind(this, 6)}>
+            <div className="fret-selector-circle">
+            </div>
           </div>
         </div>
       </div>
