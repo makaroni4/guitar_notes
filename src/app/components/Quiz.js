@@ -69,7 +69,9 @@ var pickRandom = function(array) {
 }
 
 // https://github.com/GoogleChrome/guitar-tuner
-function AudioProcessor() {
+function AudioProcessor(handleAnswer) {
+  this.handleAnswer = handleAnswer;
+  this.lastHandle = new Date();
   this.FFTSIZE = 2048;
   this.stream = null;
   this.audioContext = new AudioContext();
@@ -123,7 +125,6 @@ function AudioProcessor() {
   }
 
   this.onVisibilityChange = function() {
-    console.log("--> onVisibilityChange")
     if (document.hidden) {
       this.sendingAudioData = false;
 
@@ -169,14 +170,6 @@ function AudioProcessor() {
     // Fill up the data.
     this.analyser.getFloatTimeDomainData(this.frequencyBuffer);
 
-    // console.log(this.frequencyBuffer)
-    // var newBuff = [];
-    // for (let d = 0; d < this.frequencyBuffer.length; d++) {
-    //   newBuff[d] = Math.abs(this.frequencyBuffer[d]);
-    // }
-    // var maxIndex = newBuff.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
-    // console.log(maxIndex)
-
     // Figure out the root-mean-square, or rms, of the audio. Basically
     // this seems to be the amount of signal in the buffer.
     for (let d = 0; d < this.frequencyBuffer.length; d++) {
@@ -220,8 +213,7 @@ function AudioProcessor() {
       //
       // A better version of this would be to curve match on the data.
       for (let i = 0; i < searchSize; i++) {
-        difference += Math.abs(this.frequencyBuffer[i] -
-            this.frequencyBuffer[i + s]);
+        difference += Math.abs(this.frequencyBuffer[i] - this.frequencyBuffer[i + s]);
       }
 
       difference /= searchSize;
@@ -240,7 +232,6 @@ function AudioProcessor() {
     this.lastRms = rms;
 
     return this.audioContext.sampleRate / actualFrequency;
-
   }
 
   this.dispatchAudioData = function(time) {
@@ -248,13 +239,15 @@ function AudioProcessor() {
     // Always set up the next pass here, because we could
     // early return from this pass if there's not a lot
     // of exciting data to deal with.
-    if (this.sendingAudioData)
+    if (this.sendingAudioData) {
       requestAnimationFrame(this.dispatchAudioData);
+    }
 
     let frequency = this.autocorrelateAudioData(time);
 
-    if (frequency === 0)
+    if (frequency === 0) {
       return;
+    }
 
     // Convert the most active frequency to linear, based on A440.
     let dominantFrequency = Math.log2(frequency / 440);
@@ -274,8 +267,12 @@ function AudioProcessor() {
 
     // Now tell anyone who's interested.
     let notes = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
-    console.log([frequency, octave, notes[note]])
-    // YOUR CODE GOES HERE
+    // console.log([frequency, octave, notes[note]])
+
+    if(new Date() - this.lastHandle > 2000) {
+      this.handleAnswer(octave, note);
+      this.lastHandle = new Date();
+    }
   }
 
   // Bind as we would have done for anything in the constructor so we can use
@@ -312,11 +309,13 @@ export class Quiz extends React.Component {
   }
 
   componentDidMount() {
-    var processor = new AudioProcessor();
+    var processor = new AudioProcessor(this.handleAnswer.bind(this));
     processor.attached();
   }
 
   handleAnswer(string, fret) {
+    console.log([string, fret]);
+
     this.setState({
       currentAnswer: fret
     });
@@ -332,8 +331,6 @@ export class Quiz extends React.Component {
         var $fret = $frets[fret - 1];
 
         var $fretSelectorCircle = $fret.getElementsByClassName("fret-selector-circle")[self.state.currentString - 1];
-
-        console.log($fretSelectorCircle)
 
         $fretSelectorCircle.className += " fret-selector-circle--answer-highlight";
 

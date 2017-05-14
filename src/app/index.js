@@ -8,6 +8,8 @@ import { Root } from "./components/Root";
 import { Home } from "./components/Home";
 import { Stats } from "./components/Stats";
 
+import * as _ from 'underscore';
+
 class App extends React.Component {
   render() {
     return (
