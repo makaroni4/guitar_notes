@@ -86,40 +86,6 @@ function AudioProcessor() {
 
   this.sendingAudioData = false;
 
-  this.strings = {
-    e2: {
-      offset: Math.round(this.audioContext.sampleRate / 82.4069),
-      difference: 0
-    },
-
-    a2: {
-      offset: Math.round(this.audioContext.sampleRate / 110),
-      difference: 0
-    },
-
-    d3: {
-      offset: Math.round(this.audioContext.sampleRate / 146.832),
-      difference: 0
-    },
-
-    g3: {
-      offset: Math.round(this.audioContext.sampleRate / 195.998),
-      difference: 0
-    },
-
-    b3: {
-      offset: Math.round(this.audioContext.sampleRate / 246.932),
-      difference: 0
-    },
-
-    e4: {
-      offset: Math.round(this.audioContext.sampleRate / 329.628),
-      difference: 0
-    }
-  };
-
-  this.stringsKeys = Object.keys(this.strings);
-
   this.lastRms = 0;
   this.rmsThreshold = 0.006;
   this.assessedStringsInLastFrame = false;
@@ -182,10 +148,6 @@ function AudioProcessor() {
 
   }
 
-  this.sortStringKeysByDifference = function(a, b) {
-    return this.strings[a].difference - this.strings[b].difference;
-  }
-
   /**
    * Autocorrelate the audio data, which is basically where you
    * compare the audio buffer to itself, offsetting by one each
@@ -229,65 +191,20 @@ function AudioProcessor() {
 
     // Only check for a new string if the volume goes up. Otherwise assume
     // that the string is the same as the last frame.
-    if (rms > this.lastRms + this.rmsThreshold)
+    if (rms > this.lastRms + this.rmsThreshold) {
       this.assessStringsUntilTime = time + 250;
-
-    if (time < this.assessStringsUntilTime) {
-
-      this.assessedStringsInLastFrame = true;
-
-      // Go through each string and figure out which is the most
-      // likely candidate for the string being tuned based on the
-      // difference to the "perfect" tuning.
-      for (let o = 0; o < this.stringsKeys.length; o++) {
-
-        offsetKey = this.stringsKeys[o];
-        offset = this.strings[offsetKey].offset;
-        difference = 0;
-
-        // Reset how often this string came out as the closest.
-        if (assessedStringsInLastFrame === false)
-          this.strings[offsetKey].difference = 0;
-
-        // Now we know where the peak is, we can start
-        // assessing this sample based on that. We will
-        // step through for this string comparing it to a
-        // "perfect wave" for this string.
-        for (let i = 0; i < searchSize; i++) {
-          difference += Math.abs(this.frequencyBuffer[i] -
-              this.frequencyBuffer[i + offset]);
-        }
-
-        difference /= searchSize;
-
-        // Weight the difference by frequency. So lower strings get
-        // less preferential treatment (higher offset values). This
-        // is because harmonics can mess things up nicely, so we
-        // course correct a little bit here.
-        this.strings[offsetKey].difference += (difference * offset);
-      }
-
-    } else {
-      this.assessedStringsInLastFrame = false;
     }
 
-    // If this is the first frame where we've not had to reassess strings
-    // then we will order by the string with the largest number of matches.
-    if (assessedStringsInLastFrame === true &&
-        this.assessedStringsInLastFrame === false) {
-      this.stringsKeys.sort(this.sortStringKeysByDifference);
-    }
+    this.assessedStringsInLastFrame = time < this.assessStringsUntilTime;
 
     // Next for the top candidate in the set, figure out what
     // the actual offset is from the intended target.
     // We'll do it by making a full sweep from offset - 10 -> offset + 10
     // and seeing exactly how long it takes for this wave to repeat itself.
     // And that will be our *actual* frequency.
-    let searchRange = 10;
-    let assumedString = this.strings[this.stringsKeys[0]];
-    let searchStart = assumedString.offset - searchRange;
-    let searchEnd = assumedString.offset + searchRange;
-    let actualFrequency = assumedString.offset;
+    let searchStart = 20;
+    let searchEnd = 600;
+    let actualFrequency = 0;
     let smallestDifference = Number.POSITIVE_INFINITY;
 
     for (let s = searchStart; s < searchEnd; s++) {
@@ -364,7 +281,6 @@ function AudioProcessor() {
   // Bind as we would have done for anything in the constructor so we can use
   // them without confusing what 'this' means. Yay window scoped.
   this.dispatchAudioData = this.dispatchAudioData.bind(this);
-  this.sortStringKeysByDifference = this.sortStringKeysByDifference.bind(this);
   this.onVisibilityChange = this.onVisibilityChange.bind(this);
 }
 
